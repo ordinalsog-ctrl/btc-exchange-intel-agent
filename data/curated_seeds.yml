@@ -1,0 +1,20 @@
+seeds:
+  - address: "33qXiU6YcrZv2YBi2mCoYKgEohiN2REkJ2"
+    entity_name: "Coinbase"
+    entity_type: "exchange"
+    source_type: "seed"
+    source_name: "curated_seed_file"
+    source_url: "https://www.walletexplorer.com/address/33qXiU6YcrZv2YBi2mCoYKgEohiN2REkJ2"
+    evidence_type: "curated_seed"
+    proof_type: "analyst_asserted"
+    confidence_hint: 0.95
+    tags:
+      - "curated"
+      - "analyst"
+      - "coinbase"
+      - "walletexplorer"
+    metadata:
+      wallet_id: "000000030ae8727e"
+      support_url: "https://www.walletexplorer.com/wallet/000000030ae8727e"
+      provenance: "User-provided Coinbase attribution anchored to WalletExplorer cluster."
+    notes: "Kuratiertes Coinbase-Seed fuer Test und kuenftige Coinbase-Breadth-Abdeckung."

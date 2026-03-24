@@ -3,6 +3,7 @@ from __future__ import annotations
 import asyncio
 import logging
 import sys
+from pathlib import Path
 
 import httpx
 
@@ -10,6 +11,8 @@ from btc_exchange_intel_agent.collectors.registry import build_providers
 from btc_exchange_intel_agent.config import load_settings
 from btc_exchange_intel_agent.db import build_session_factory, init_db
 from btc_exchange_intel_agent.logging import configure_logging
+from btc_exchange_intel_agent.services.db_import import import_sqlite_dbs
+from btc_exchange_intel_agent.services.evaluate import load_evaluation_cases, run_evaluation
 from btc_exchange_intel_agent.services.ingestion import ingest_attributions, record_run_finished, record_run_started
 
 logger = logging.getLogger(__name__)
@@ -101,6 +104,41 @@ def main() -> None:
         if len(sys.argv) < 3:
             raise SystemExit("usage: python -m btc_exchange_intel_agent.main collect-provider <provider_name>")
         asyncio.run(collect_once({sys.argv[2]}))
+        return
+    if command == "collect-providers":
+        if len(sys.argv) < 3:
+            raise SystemExit("usage: python -m btc_exchange_intel_agent.main collect-providers <provider_name> [<provider_name> ...]")
+        asyncio.run(collect_once(set(sys.argv[2:])))
+        return
+    if command == "import-db":
+        if len(sys.argv) < 3:
+            raise SystemExit("usage: python -m btc_exchange_intel_agent.main import-db <sqlite_db_path> [<sqlite_db_path> ...]")
+        settings = load_settings()
+        init_db(settings.database_url)
+        session_factory = build_session_factory(settings.database_url)
+        source_paths = [str(Path(path).expanduser().resolve()) for path in sys.argv[2:]]
+        total_found, total_new = import_sqlite_dbs(settings.database_url, source_paths, session_factory)
+        print(f"imported={total_found} new_addresses={total_new}")
+        return
+    if command == "evaluate":
+        if len(sys.argv) < 3:
+            raise SystemExit("usage: python -m btc_exchange_intel_agent.main evaluate <yaml_path>")
+        settings = load_settings()
+        init_db(settings.database_url)
+        session_factory = build_session_factory(settings.database_url)
+        session = session_factory()
+        try:
+            cases = load_evaluation_cases(str(Path(sys.argv[2]).expanduser().resolve()))
+            report = run_evaluation(session, cases)
+        finally:
+            session.close()
+        print(f"total={report['total']} passed={report['passed']} failed={report['failed']}")
+        for item in report["results"]:
+            status = "PASS" if item["passed"] else "FAIL"
+            print(
+                f"{status} label={item['label']} address={item['address']} "
+                f"found={item['actual_found']} entity={item['actual_entity']} source_type={item['actual_source_type']}"
+            )
         return
     if command == "collect-loop":
         asyncio.run(collect_loop())

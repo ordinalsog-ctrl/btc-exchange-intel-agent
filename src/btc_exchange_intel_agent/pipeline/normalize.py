@@ -28,9 +28,24 @@ def normalize_entity_name(value: str) -> str:
     normalized = re.sub(r"\b(exchange|official|global|limited|ltd|inc|group)\b", "", normalized)
     normalized = re.sub(r"\s+", " ", normalized).strip()
     aliases = {
+        "binance.com": "binance",
+        "coinbase.com": "coinbase",
         "okex": "okx",
+        "okx.com": "okx",
         "okx exchange": "okx",
         "coinbase exchange": "coinbase",
+        "kraken.com": "kraken",
+        "huobi.com": "huobi",
+        "htx": "huobi",
+        "htx.com": "huobi",
+        "bybit.com": "bybit",
+        "kucoin.com": "kucoin",
+        "bitfinex.com": "bitfinex",
+        "bitstamp.net": "bitstamp",
+        "bittrex.com": "bittrex",
+        "poloniex.com": "poloniex",
+        "luno.com": "luno",
+        "localbitcoins.com": "localbitcoins",
         "gate io": "gate.io",
         "crypto com": "crypto.com",
     }

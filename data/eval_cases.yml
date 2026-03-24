@@ -1,0 +1,61 @@
+cases:
+  - label: "Coinbase curated seed"
+    address: "33qXiU6YcrZv2YBi2mCoYKgEohiN2REkJ2"
+    expected_entity: "coinbase"
+    expected_source_type: "seed"
+
+  - label: "Coinbase workspace seed"
+    address: "3Nxwenay9Z8Lc9JBiywExpnEFiLp6Afp8v"
+    expected_entity: "coinbase"
+    expected_source_type: "seed"
+
+  - label: "Binance workspace seed"
+    address: "34xp4vRoCGJym3xR7yCVPFHoCNxv4Twseo"
+    expected_entity: "binance"
+
+  - label: "Huobi workspace seed"
+    address: "1DLymHytXsdD2Bhz7Ywa8JpGX7QsQFH1xr"
+    expected_entity: "huobi"
+    expected_source_type: "seed"
+
+  - label: "Kraken workspace seed"
+    address: "3AfP6p8FJWJDzgYJSeDMkGSfYBBafTaRqp"
+    expected_entity: "kraken"
+    expected_source_type: "seed"
+
+  - label: "OKX seed or PoR"
+    address: "3LQeSn2MMTCDeorcNkqMXGEFzhW7LqiKfA"
+    expected_entity: "okx"
+
+  - label: "Bybit official PoR"
+    address: "bc1qjysjfd9t9aspttpjqzv68k0ydpe7pvyd5v3pjl"
+    expected_entity: "bybit"
+
+  - label: "Bitstamp workspace seed"
+    address: "3P3QsMVK89JBNqZQv5zMAKG8FK3kJM4rjt"
+    expected_entity: "bitstamp"
+    expected_source_type: "seed"
+
+  - label: "Gate.io workspace seed"
+    address: "3Q2PaKfBjJFHWDLYPPSwec7BNXQR4DQSAL"
+    expected_entity: "gate.io"
+    expected_source_type: "seed"
+
+  - label: "Bittrex python seed"
+    address: "16rCmCmbuWDhPjWTrpQGaU3EPdZF7MTdUk"
+    expected_entity: "bittrex"
+    expected_source_type: "seed"
+
+  - label: "Coincheck python seed"
+    address: "336xGpGweq1wtY4kRTuA4w6d7yDkBU9czU"
+    expected_entity: "coincheck"
+    expected_source_type: "seed"
+
+  - label: "Blockchain.com python seed"
+    address: "1HB5XMLmzFVj8ALj6mfBsbifRoD4miY36v"
+    expected_entity: "blockchain.com"
+    expected_source_type: "seed"
+
+  - label: "Unknown control address"
+    address: "1BoatSLRHtKNngkdXEeobR76b53LETtpyT"
+    expected_found: false

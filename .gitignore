@@ -1,8 +1,12 @@
 .env
+.DS_Store
 .cache/
 .venv/
 __pycache__/
 *.pyc
+*.sqlite
+*.sqlite-shm
+*.sqlite-wal
 *.sqlite3
 *.db
 .pytest_cache/

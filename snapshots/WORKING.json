@@ -1,0 +1,27 @@
+{
+  "snapshot_name": "WORKING",
+  "created_at": "2026-03-24T18:41:42+01:00",
+  "base_snapshot": "LATEST.sqlite",
+  "database_path": "/Users/jonasweiss/Documents/New project/btc-exchange-intel-agent/snapshots/WORKING.sqlite",
+  "stats": {
+    "entities": 40,
+    "addresses": 1761288,
+    "labels": 1770659
+  },
+  "delta": {
+    "curated_seeds_added": 1,
+    "workspace_seed_sql_labels_added": 48,
+    "workspace_seed_python_labels_added": 11,
+    "evaluation_cases_passed": 13,
+    "evaluation_cases_total": 13,
+    "coinbase_seed_addresses_added": [
+      "33qXiU6YcrZv2YBi2mCoYKgEohiN2REkJ2"
+    ]
+  },
+  "notes": [
+    "Arbeitskopie des eingefrorenen LATEST-Snapshots.",
+    "Enthaelt einen lokalen Coinbase-Seed aus data/curated_seeds.yml.",
+    "Enthaelt Workspace-Seeds aus AIFinancialCrime/sql/008_seed_exchange_addresses.sql und KNOWN_COLD_WALLETS.",
+    "Der laufende lokale Agent wurde fuer Tests auf diese Arbeitskopie umgestellt."
+  ]
+}
