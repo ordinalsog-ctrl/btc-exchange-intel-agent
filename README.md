@@ -2,6 +2,10 @@
 
 Collector- und Query-Service fuer BTC-Exchange-Adressen.
 
+Projektjournal und Handover-Status:
+
+- [JOURNAL.md](/Users/jonasweiss/Documents/New project/btc-exchange-intel-agent/JOURNAL.md)
+
 ## Scope
 
 - sammelt fortlaufend neue BTC-Exchange-Adressen aus kostenlosen Quellen
