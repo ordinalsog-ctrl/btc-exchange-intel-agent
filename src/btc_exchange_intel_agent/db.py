@@ -1,8 +1,9 @@
 from __future__ import annotations
 
+from functools import lru_cache
 from datetime import datetime
 
-from sqlalchemy import DateTime, Float, ForeignKey, Integer, String, Text, UniqueConstraint, create_engine
+from sqlalchemy import DateTime, Float, ForeignKey, Integer, String, Text, UniqueConstraint, create_engine, event
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship, sessionmaker
 
 
@@ -69,8 +70,28 @@ class CollectorRun(Base):
     error_text: Mapped[str | None] = mapped_column(Text, nullable=True)
 
 
+@lru_cache(maxsize=8)
 def build_engine(database_url: str):
-    return create_engine(database_url, future=True)
+    connect_args: dict[str, object] = {}
+    if database_url.startswith("sqlite:"):
+        connect_args = {
+            "check_same_thread": False,
+            "timeout": 30,
+        }
+
+    engine = create_engine(database_url, future=True, connect_args=connect_args)
+
+    if database_url.startswith("sqlite:"):
+        @event.listens_for(engine, "connect")
+        def _configure_sqlite(dbapi_connection, connection_record):  # type: ignore[no-redef]
+            cursor = dbapi_connection.cursor()
+            cursor.execute("PRAGMA journal_mode=WAL")
+            cursor.execute("PRAGMA synchronous=NORMAL")
+            cursor.execute("PRAGMA busy_timeout=30000")
+            cursor.execute("PRAGMA foreign_keys=ON")
+            cursor.close()
+
+    return engine
 
 
 def build_session_factory(database_url: str):

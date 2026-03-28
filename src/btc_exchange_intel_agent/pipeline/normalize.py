@@ -21,6 +21,37 @@ EXCHANGE_HINTS = {
     "mexc",
 }
 
+NON_EXCHANGE_HINTS = {
+    "coinjoin",
+    "coinjoinmess",
+    "mixer",
+    "mixing",
+    "tumbler",
+    "wasabi",
+    "whirlpool",
+    "joinmarket",
+    "samourai",
+    "chipmixer",
+    "tornado",
+    "mining",
+    "pool",
+    "wallet",
+    "commerce",
+    "merchant",
+    "gateway",
+    "payment",
+    "pay",
+    "bridge",
+    "swap",
+    "staking",
+    "faucet",
+    "casino",
+    "gambling",
+    "bet",
+    "loan",
+    "lending",
+}
+
 
 def normalize_entity_name(value: str) -> str:
     normalized = value.lower()
@@ -56,6 +87,13 @@ def is_probable_btc_address(value: str) -> bool:
     return bool(BTC_ADDRESS_RE.match(value))
 
 
+def looks_like_non_exchange(label: str, path_or_context: str = "") -> bool:
+    haystack = f"{label} {path_or_context}".lower()
+    return any(token in haystack for token in NON_EXCHANGE_HINTS)
+
+
 def looks_like_exchange(label: str, path_or_context: str = "") -> bool:
     haystack = f"{label} {path_or_context}".lower()
+    if looks_like_non_exchange(label, path_or_context):
+        return False
     return any(token in haystack for token in EXCHANGE_HINTS)

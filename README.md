@@ -81,6 +81,14 @@ Fuer echte externe Erkennung ohne interne Seeds:
 
 Damit werden `source_type=seed`-Treffer bewusst ausgeblendet. So laesst sich sauber messen, ob eine Adresse aus freien externen Quellen wie `official_por`, `public_tagpack` oder `wallet_label` erkannt wird.
 
+Bei unbekannten Adressen kann der Agent zusaetzlich live nachziehen:
+
+- WalletExplorer Address API / Address Page
+- WalletExplorer `wallet_id`-Corroboration fuer unlabeled Cluster-Mitglieder
+- OKLink Address Page als `hint`, nicht als allein belastbarer Treffer
+- optional Blockchair Address API, mit oder ohne API-Key
+- optional WalletExplorer Wallet-Expansion, also das direkte Nachziehen weiterer Adressen aus dem live gefundenen WalletExplorer-Wallet
+
 ## Collector-Modi
 
 - `python -m btc_exchange_intel_agent.main collect-once`
@@ -138,11 +146,14 @@ for result in results:
 - Caches werden unter `.cache/` abgelegt, damit instabile DNS-/Rate-Limit-Phasen bereits geholte Quellen nicht blockieren.
 - Sehr grosse Quellen wie WalletExplorer werden batchweise ingestiert, damit die Datenbank schon waehrend des Imports waechst.
 - Die API ist source-aware: staerkere Labels wie `official_por` dominieren die fuehrende Entity-Antwort gegenueber schwaecheren Public-Labels.
+- `source_type=hint` ist bewusst nicht entscheidend. Aktuell laeuft OKLink ueber diesen Pfad: sichtbar als Hinweis, aber nie allein `found=true`.
+- Unlabeled WalletExplorer-Adressen koennen ueber dieselbe `wallet_id` zu einem bereits extern getragenen Exchange-Cluster als `derived_cluster` hochgezogen werden.
 - Die produktive API kann ueber `AGENT_API_KEY` abgesichert werden. Wenn der Wert gesetzt ist, muessen Requests `X-API-Key` oder `Authorization: Bearer ...` mitsenden.
+- Der Live-Resolver kann bei einem WalletExplorer-Treffer den dazugehoerigen WalletExplorer-Wallet-Export direkt nachziehen. Das Verhalten wird ueber `WALLETEXPLORER_LIVE_EXPAND_ENABLED` und `WALLETEXPLORER_LIVE_EXPAND_MAX_ROWS` gesteuert.
 - `OKX_MAX_ARTIFACTS` und `BINANCE_MAX_AUDITS` koennen schwere historische Backfills fuer gezielte Tests oder gestaffelte Importe begrenzen. `0` bedeutet: alles verfuegbare Material ziehen.
 - WalletExplorer laesst sich fuer Breadth-First-Backfills gezielt steuern ueber `WALLETEXPLORER_START_INDEX`, `WALLETEXPLORER_INCLUDE_WALLETS`, `WALLETEXPLORER_EXCLUDE_WALLETS` und `WALLETEXPLORER_MAX_ROWS_PER_WALLET`.
-- Lokale Analysten-Seeds koennen ueber `CURATED_SEEDS_ENABLED=true` und `CURATED_SEEDS_FILE=data/curated_seeds.yml` eingespeist werden. Diese Labels laufen mit `source_type=seed` und sind damit klar von `official_por` getrennt.
-- Workspace-Seeds koennen ueber `WORKSPACE_SEEDS_ENABLED=true` eingebunden werden. Der Provider zieht aktuell kuratierte Exchange-Adressen aus [`008_seed_exchange_addresses.sql`](/Users/jonasweiss/AIFinancialCrime/sql/008_seed_exchange_addresses.sql) und `KNOWN_COLD_WALLETS` aus [`attribution_ingesters_bulk.py`](/Users/jonasweiss/AIFinancialCrime/src/investigation/attribution_ingesters_bulk.py) in den Agenten. Diese Labels laufen ebenfalls mit `source_type=seed`, aber mit eigener Provenance (`workspace_seed_sql`, `workspace_seed_python`). Wenn dieselbe Adresse in beiden Workspace-Quellen vorkommt, gewinnt bewusst der SQL-Seed-Pfad und der schwächere Python-Duplikat-Import wird uebersprungen.
+- Lokale Analysten-Seeds sind optional und standardmaessig deaktiviert. Sie koennen ueber `CURATED_SEEDS_ENABLED=true` und `CURATED_SEEDS_FILE=data/curated_seeds.yml` eingespeist werden. Diese Labels laufen mit `source_type=seed` und sind damit klar von `official_por` getrennt.
+- Workspace-Seeds sind optional und standardmaessig deaktiviert. Sie koennen ueber `WORKSPACE_SEEDS_ENABLED=true` eingebunden werden. Der Provider zieht dann explizit konfigurierte kuratierte Exchange-Adressen aus lokalen Workspace-Dateien in den Agenten. Diese Labels laufen ebenfalls mit `source_type=seed`, aber mit eigener Provenance (`workspace_seed_sql`, `workspace_seed_python`). Wenn dieselbe Adresse in beiden Workspace-Quellen vorkommt, gewinnt bewusst der SQL-Seed-Pfad und der schwaechere Python-Duplikat-Import wird uebersprungen.
 - Der Figshare-Provider zieht den oeffentlichen wissenschaftlichen Label-Datensatz ueber `https://figshare.com/ndownloader/files/48394124` in den Agenten und filtert fuer den Exchange-Fokus nur BTC-Adressen mit Exchange-Klassifikation.
 - Der Community-Provider zieht derzeit die oeffentliche Liste `exchange_wallets.txt` von `f13end` und parst sowohl `wallet:`-Zeilen als auch einfache `address + name`-Zeilen.
 - Binance wird ueber die offizielle PoR-Snapshot-Liste und offizielle ZIP-Artefakte ingestiert. OKX wird ueber die offiziellen ZIP-Snapshots ingestiert.

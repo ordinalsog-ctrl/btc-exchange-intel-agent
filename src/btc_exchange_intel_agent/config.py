@@ -14,6 +14,9 @@ class Settings:
     agent_api_key: str
     live_resolve_enabled: bool
     walletexplorer_live_lookup_enabled: bool
+    walletexplorer_live_expand_enabled: bool
+    walletexplorer_live_expand_max_rows: int
+    oklink_live_lookup_enabled: bool
     blockchair_live_lookup_enabled: bool
     blockchair_api_key: str
     host: str
@@ -66,7 +69,10 @@ def load_settings() -> Settings:
         agent_api_key=os.getenv("AGENT_API_KEY", ""),
         live_resolve_enabled=_env_bool("LIVE_RESOLVE_ENABLED", True),
         walletexplorer_live_lookup_enabled=_env_bool("WALLETEXPLORER_LIVE_LOOKUP_ENABLED", True),
-        blockchair_live_lookup_enabled=_env_bool("BLOCKCHAIR_LIVE_LOOKUP_ENABLED", True),
+        walletexplorer_live_expand_enabled=_env_bool("WALLETEXPLORER_LIVE_EXPAND_ENABLED", False),
+        walletexplorer_live_expand_max_rows=int(os.getenv("WALLETEXPLORER_LIVE_EXPAND_MAX_ROWS", "500")),
+        oklink_live_lookup_enabled=_env_bool("OKLINK_LIVE_LOOKUP_ENABLED", False),
+        blockchair_live_lookup_enabled=_env_bool("BLOCKCHAIR_LIVE_LOOKUP_ENABLED", False),
         blockchair_api_key=os.getenv("BLOCKCHAIR_API_KEY", ""),
         host=os.getenv("HOST", "0.0.0.0"),
         port=int(os.getenv("PORT", "8080")),
@@ -81,8 +87,8 @@ def load_settings() -> Settings:
         okx_max_artifacts=int(os.getenv("OKX_MAX_ARTIFACTS", "0")),
         binance_max_audits=int(os.getenv("BINANCE_MAX_AUDITS", "0")),
         curated_seeds_file=os.getenv("CURATED_SEEDS_FILE", "data/curated_seeds.yml"),
-        curated_seeds_enabled=_env_bool("CURATED_SEEDS_ENABLED", True),
-        workspace_seeds_enabled=_env_bool("WORKSPACE_SEEDS_ENABLED", True),
+        curated_seeds_enabled=_env_bool("CURATED_SEEDS_ENABLED", False),
+        workspace_seeds_enabled=_env_bool("WORKSPACE_SEEDS_ENABLED", False),
         workspace_seed_sql_file=os.getenv(
             "WORKSPACE_SEED_SQL_FILE",
             "/Users/jonasweiss/AIFinancialCrime/sql/008_seed_exchange_addresses.sql",

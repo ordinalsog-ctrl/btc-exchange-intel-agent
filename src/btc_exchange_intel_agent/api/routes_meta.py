@@ -1,18 +1,15 @@
 from __future__ import annotations
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Request
 
-from btc_exchange_intel_agent.db import build_session_factory
 from btc_exchange_intel_agent.schemas import HealthOut, StatsOut
 from btc_exchange_intel_agent.services.lookup import get_stats
 
 router = APIRouter()
 
 
-def get_session():
-    from btc_exchange_intel_agent.api.app import settings
-
-    session_factory = build_session_factory(settings.database_url)
+def get_session(request: Request):
+    session_factory = request.app.state.session_factory
     session = session_factory()
     try:
         yield session

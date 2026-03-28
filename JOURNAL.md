@@ -107,6 +107,7 @@ Wichtig:
 - `seed` ist **nicht** mit externer Discovery gleichzusetzen
 - `seed` dient nur als transparente, schwache Sonderklasse fuer kuratierte Analysten-/Test-Seeds
 - fuer echte Messung der externen Erkennung gibt es `external_only=true`
+- interne Seed-Provider sind standardmaessig deaktiviert und muessen bewusst zugeschaltet werden
 
 Relevante Dateien:
 
@@ -123,9 +124,19 @@ Aktuell aktiv:
 
 - WalletExplorer Address API
 - WalletExplorer Address Page Fallback
-- optional Blockchair live, falls Key gesetzt
+- WalletExplorer `wallet_id`-Corroboration fuer unlabeled Cluster-Mitglieder
+- OKLink Address Page als `hint`
+- WalletExplorer Wallet-Expansion nach Live-Treffer
+- optional Blockchair live, auch ohne Key im Low-Volume-Fall
 
 Treffer werden danach direkt in die Agent-DB ingestiert.
+
+Wichtig:
+
+- `oklink_address_page` ist bewusst nur `source_type=hint`
+- ein OKLink-Treffer macht niemals allein `found=true`
+- wenn ein staerkerer Treffer spaeter widerspricht, gewinnt die staerkere Quelle bei der fuehrenden Entity-Antwort
+- wenn WalletExplorer fuer eine Adresse nur eine `wallet_id`, aber noch kein Label liefert, kann der Agent diese Adresse jetzt ueber bereits extern getragene Cluster-Mitglieder derselben `wallet_id` als `derived_cluster` erkennen
 
 Relevante Dateien:
 
@@ -140,6 +151,7 @@ Beispiel:
   - wird jetzt live als `Kraken` erkannt
   - Quelle: `walletexplorer_address_api`
   - wird danach persistent im Agenten gespeichert
+  - wenn WalletExplorer einen Wallet-Link liefert, kann der Agent zusaetzlich weitere Kraken-Adressen aus dem zugehoerigen WalletExplorer-Wallet direkt nachziehen
 
 ### 5. Evaluationspfad aufgebaut
 

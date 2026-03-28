@@ -93,6 +93,9 @@ class WalletExplorerProvider:
                 links.append(href)
         return links
 
+    def _wallet_label(self, wallet_href: str) -> str:
+        return wallet_href.rstrip("/").rsplit("/", 1)[-1]
+
     def _parse_wallet_csv(
         self,
         csv_text: str,
