@@ -157,6 +157,7 @@ for result in results:
 - Der Figshare-Provider zieht den oeffentlichen wissenschaftlichen Label-Datensatz ueber `https://figshare.com/ndownloader/files/48394124` in den Agenten und filtert fuer den Exchange-Fokus nur BTC-Adressen mit Exchange-Klassifikation.
 - Der Community-Provider zieht derzeit die oeffentliche Liste `exchange_wallets.txt` von `f13end` und parst sowohl `wallet:`-Zeilen als auch einfache `address + name`-Zeilen.
 - Binance wird ueber die offizielle PoR-Snapshot-Liste und offizielle ZIP-Artefakte ingestiert. OKX wird ueber die offiziellen ZIP-Snapshots ingestiert.
+- HTX wird ueber die offizielle PoR-API ingestiert: zuerst Snapshot-/Download-Metadaten von `huobi.com`, danach die offizielle XLSX-Datei mit `address`, `message` und `signature`. Die BTC-Zeilen laufen als `source_type=official_por` mit `proof_type=signed_message`.
 - KuCoin liefert aktuell ueber die oeffentlichen PoR-Endpunkte vor allem Audit-/Reserve-Metadaten; der Provider scannt diese Quellen und etwaige oeffentliche Report-Links auf BTC-Adressen, emittiert aber nur dann Treffer, wenn wirklich Adressen oeffentlich enthalten sind.
 - Bereits geerntete SQLite-Bestaende lassen sich mit `import-db` in eine gemeinsame Produktions-DB zusammenziehen. Das ist derzeit der schnellste Weg, GraphSense, WalletExplorer und offizielle PoR-Smoke-DBs zu vereinen.
 

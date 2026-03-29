@@ -63,6 +63,7 @@ Der Agent zieht aktuell Exchange-Informationen aus diesen Quellen:
 Offizielle / starke Quellen:
 
 - Coinbase `cbBTC Proof of Reserves`
+- HTX PoR
 - OKX PoR
 - Bybit PoR
 - Binance PoR
@@ -78,6 +79,7 @@ Oeffentliche Label-/Dataset-Quellen:
 Relevante Provider:
 
 - [por_coinbase.py](/Users/jonasweiss/Documents/New project/btc-exchange-intel-agent/src/btc_exchange_intel_agent/providers/por_coinbase.py)
+- [por_htx.py](/Users/jonasweiss/Documents/New project/btc-exchange-intel-agent/src/btc_exchange_intel_agent/providers/por_htx.py)
 - [por_okx.py](/Users/jonasweiss/Documents/New project/btc-exchange-intel-agent/src/btc_exchange_intel_agent/providers/por_okx.py)
 - [por_bybit.py](/Users/jonasweiss/Documents/New project/btc-exchange-intel-agent/src/btc_exchange_intel_agent/providers/por_bybit.py)
 - [por_binance.py](/Users/jonasweiss/Documents/New project/btc-exchange-intel-agent/src/btc_exchange_intel_agent/providers/por_binance.py)
@@ -108,6 +110,29 @@ Wichtig:
 - `seed` dient nur als transparente, schwache Sonderklasse fuer kuratierte Analysten-/Test-Seeds
 - fuer echte Messung der externen Erkennung gibt es `external_only=true`
 - interne Seed-Provider sind standardmaessig deaktiviert und muessen bewusst zugeschaltet werden
+
+### 2a. Neuer Stand 29.03.2026: HTX offiziell ueber XLSX statt Summary-CSV
+
+Wichtige Korrektur fuer die PoR-Roadmap:
+
+- Das GitHub-`huobi_por.csv` ist nur ein Summary ohne Einzeladressen.
+- Die echte verwertbare HTX-Datei ist die offizielle XLSX aus dem Download-Flow der HTX-PoR-Seite.
+- Der neue Provider holt daher zuerst die HTX-PoR-API an `huobi.com`, zieht daraus die XLSX-Download-URL und parst danach die Detail-Tabelle mit:
+  - `coin`
+  - `address`
+  - `snapshot height`
+  - `balance`
+  - `message`
+  - `signature`
+- BTC-Zeilen werden als `official_por` mit `proof_type=signed_message` gespeichert.
+
+Direkter Parser-Smoke-Test gegen die echte HTX-XLSX vom Snapshot `20260301`:
+
+- `8` BTC-Adressen extrahiert
+- Beispieladressen:
+  - `143gLvWYUojXaWZRrxquRKpVNTkhmr415B`
+  - `12qTdZHx6f77aQ74CPCZGSY47VaRwYjVD8`
+  - `1HckjUpRGcrrRAtFaaCAUaGjsPx9oYmLaZ`
 
 Relevante Dateien:
 

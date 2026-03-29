@@ -8,6 +8,7 @@ from btc_exchange_intel_agent.providers.graphsense import GraphSenseProvider
 from btc_exchange_intel_agent.providers.por_binance import BinancePorProvider
 from btc_exchange_intel_agent.providers.por_bybit import BybitPorProvider
 from btc_exchange_intel_agent.providers.por_coinbase import CoinbasePorProvider
+from btc_exchange_intel_agent.providers.por_htx import HtxPorProvider
 from btc_exchange_intel_agent.providers.por_kucoin import KuCoinPorProvider
 from btc_exchange_intel_agent.providers.por_okx import OkxPorProvider
 from btc_exchange_intel_agent.providers.public_dataset import PublicDatasetProvider
@@ -48,6 +49,14 @@ def build_providers(settings, http_client):
         providers.append(GraphSenseProvider(http_client, cache_dir=settings.cache_dir))
     if settings.coinbase_por_enabled:
         providers.append(CoinbasePorProvider(http_client, cache_dir=settings.cache_dir))
+    if settings.htx_por_enabled:
+        providers.append(
+            HtxPorProvider(
+                http_client,
+                cache_dir=settings.cache_dir,
+                max_versions=settings.htx_max_versions,
+            )
+        )
     if settings.okx_por_enabled:
         providers.append(
             OkxPorProvider(

@@ -45,6 +45,8 @@ class Settings:
     bybit_por_enabled: bool
     kucoin_por_enabled: bool
     binance_por_enabled: bool
+    htx_por_enabled: bool
+    htx_max_versions: int
 
 
 def _env_bool(name: str, default: bool) -> bool:
@@ -106,4 +108,6 @@ def load_settings() -> Settings:
         bybit_por_enabled=_env_bool("BYBIT_POR_ENABLED", True),
         kucoin_por_enabled=_env_bool("KUCOIN_POR_ENABLED", True),
         binance_por_enabled=_env_bool("BINANCE_POR_ENABLED", True),
+        htx_por_enabled=_env_bool("HTX_POR_ENABLED", True),
+        htx_max_versions=int(os.getenv("HTX_MAX_VERSIONS", "0")),
     )
